@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <h2 class="mb-4">Численное дифференцирование</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="POST" class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label">Порядок производной k</label>
+      <input type="number" name="k" class="form-control" min="1" value="1" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Порядок точности p</label>
+      <input type="number" name="p" class="form-control" min="0" value="2" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Узлов слева r</label>
+      <input type="number" name="r" class="form-control" min="0" value="1" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Узлов справа s</label>
+      <input type="number" name="s" class="form-control" min="0" value="1" required>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" type="submit">Построить формулу</button>
+    </div>
+  </form>
+</div>
+
+{% if formula %}
+  <div class="mt-5">
+    <h3>Коэффициенты для d<sup>{{k}}</sup>/dx<sup>{{k}}</sup> (точность {{p}}):</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped mt-3">
+        <thead class="table-light">
+          <tr>
+            <th>Узел j</th>
+            <th>Коэффициент c<sub>j</sub></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for node, c in formula %}
+            <tr>
+              <td>{{ node }}</td>
+              <td>{{ "%.6f"|format(c) }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

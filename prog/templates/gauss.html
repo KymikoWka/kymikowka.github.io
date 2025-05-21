@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <h2 class="mb-4">Метод Гаусса</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form id="form-gauss" method="POST">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-3">
+        <label class="form-label">Размерность n</label>
+        <input type="number" name="n" id="n" class="form-control" min="1" value="3" required>
+      </div>
+      <div class="col-md-3">
+        <button type="button" class="btn btn-secondary" onclick="buildMatrix()">Построить таблицу</button>
+      </div>
+    </div>
+
+    <div id="matrix-container" class="table-responsive mt-4"></div>
+
+    <button type="submit" class="btn btn-primary mt-3">Решить</button>
+  </form>
+
+  {% if result %}
+    <h3 class="mt-5">Решение x:</h3>
+    <table class="table table-striped mt-2">
+      <thead class="table-light">
+        <tr><th>i</th><th>xi</th></tr>
+      </thead>
+      <tbody>
+        {% for xi in result %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ "%.6f"|format(xi) }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+</div>
+
+<script>
+  // Шаблонная матрица 3×3 и вектор b для примера
+  const DEFAULT_A = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 10]
+  ];
+  const DEFAULT_B = [6, 15, 25];
+
+  function buildMatrix() {
+    const n = parseInt(document.getElementById('n').value, 10);
+    let html = '<table class="table table-bordered">';
+    html += '<thead><tr><th></th>';
+    for (let j = 0; j < n; j++) {
+      html += `<th>a${j+1},${j+1}</th>`;
+    }
+    html += '<th>b</th></tr></thead><tbody>';
+
+    for (let i = 0; i < n; i++) {
+      html += `<tr><th>Row ${i+1}</th>`;
+      for (let j = 0; j < n; j++) {
+        // если размерность 3, берём из DEFAULT_A, иначе пусто
+        const defA = (n === 3 && DEFAULT_A[i] && DEFAULT_A[i][j] !== undefined)
+                     ? DEFAULT_A[i][j] : '';
+        html += `<td>
+          <input type="number" step="any"
+                 class="form-control form-control-sm"
+                 name="a_${i}_${j}"
+                 value="${defA}" required>
+         </td>`;
+      }
+      const defB = (n === 3 && DEFAULT_B[i] !== undefined) ? DEFAULT_B[i] : '';
+      html += `<td>
+        <input type="number" step="any"
+               class="form-control form-control-sm"
+               name="b_${i}"
+               value="${defB}" required>
+      </td>`;
+      html += '</tr>';
+    }
+
+    html += '</tbody></table>';
+    document.getElementById('matrix-container').innerHTML = html;
+  }
+
+  // При загрузке страницы сразу строим шаблон 3×3
+  document.addEventListener('DOMContentLoaded', buildMatrix);
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="text-center my-5">
+  <h2 class="display-6 mb-4">Выберите метод</h2>
+
+  <div class="list-group w-50 mx-auto">
+    <a href="/runge-kutta" class="list-group-item list-group-item-action">Метод Рунге–Кутты</a>
+    <a href="/adams"       class="list-group-item list-group-item-action">Метод Адамса–Мултона</a>
+    <a href="/gauss"       class="list-group-item list-group-item-action">Метод Гаусса</a>
+    <a href="/diff"        class="list-group-item list-group-item-action">Численное дифференцирование</a>
+    <a href="/bisect"      class="list-group-item list-group-item-action">Метод деления пополам</a>
+    <a href="/iter"        class="list-group-item list-group-item-action">Метод простой итерации</a>
+    <a href="/newton"      class="list-group-item list-group-item-action">Метод Ньютона</a>
+    <a href="/krylov"      class="list-group-item list-group-item-action">Метод Крылова</a>
+  </div>
+</div>
+
+<!-- Кнопка поддержки в Telegram -->
+<a href="https://t.me/Kymikoha" target="_blank"
+   class="btn btn-warning position-fixed bottom-0 end-0 m-4 shadow-lg">
+  <i class="bi bi-telegram"></i> Сообщить об ошибке
+</a>
+{% endblock %}

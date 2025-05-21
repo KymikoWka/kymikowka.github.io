@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4 shadow-sm">
+  <h2 class="mb-4">Метод Крылова</h2>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form id="form-krylov" method="POST" class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label">Размерность n</label>
+      <input type="number" id="n" name="n" class="form-control" min="1" value="3" required>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="button" class="btn btn-secondary w-100" onclick="build()">Построить поля</button>
+    </div>
+    <div id="matrix-container" class="table-responsive col-12 mt-3"></div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Решить</button>
+    </div>
+  </form>
+</div>
+
+{% if result %}
+  <div class="mt-5">
+    <h3>Матрица системы Крылова V</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm mt-2">
+        <thead class="table-light">
+          <tr>
+            <th>i\j</th>
+            {% for j in range(result.V[0]|length) %}
+              <th>v{{ j }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in result.V %}
+            <tr>
+              {% for val in row %}
+                <td>{{ "%.6f"|format(val) }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-4">Вектор b</h3>
+    <table class="table table-striped table-sm w-auto">
+      <tbody>
+        {% for bi in result.b %}
+          <tr><td>{{ "%.6f"|format(bi) }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3 class="mt-4">Коэффициенты многочлена</h3>
+    <table class="table table-bordered table-sm w-auto">
+      <thead class="table-light">
+        <tr>
+          {% for ci in result.coeffs %}
+            <th>c{{ loop.index0 }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {% for ci in result.coeffs %}
+            <td>{{ "%.6f"|format(ci) }}</td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="mt-4">Собственные значения</h3>
+    <table class="table table-bordered table-sm w-auto">
+      <thead class="table-light">
+        <tr>
+          {% for ev in result.eigvals %}
+            <th>λ{{ loop.index }}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          {% for ev in result.eigvals %}
+            <td>
+              {{ "%.6f"|format(ev.real) }}
+              {% if ev.imag %}+{{ "%.6f"|format(ev.imag) }}i{% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+
+<script>
+function build() {
+  const n = parseInt(document.getElementById('n').value, 10);
+  let html = '<table class="table table-bordered table-sm"><thead><tr><th></th>';
+  for (let j = 0; j < n; j++) {
+    html += `<th>a${j+1},${j+1}</th>`;
+  }
+  html += '</tr></thead><tbody>';
+  // Matrix A
+  for (let i = 0; i < n; i++) {
+    html += `<tr><th>Row ${i+1}</th>`;
+    for (let j = 0; j < n; j++) {
+      html += `<td><input type="number" step="any" class="form-control form-control-sm" name="a_${i}_${j}" value="0" required></td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody></table><br>';
+  // Vector f
+  html += '<label class="form-label">Вектор f₀:</label><div class="mb-2">';
+  for (let i = 0; i < n; i++) {
+    html += `<input type="number" step="any" class="form-control form-control-sm d-inline-block me-1" style="width:60px" name="f_${i}" value="1" required>`;
+  }
+  html += '</div>';
+  document.getElementById('matrix-container').innerHTML = html;
+}
+document.addEventListener('DOMContentLoaded', build);
+</script>
+{% endblock %}

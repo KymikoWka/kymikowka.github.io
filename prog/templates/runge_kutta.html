@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card p-4">
+  <h2>Метод Рунге–Кутты 4-го порядка</h2>
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">x₀:</label>
+      <input class="form-control" name="x0" value="0" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">y₁(x₀):</label>
+      <input class="form-control" name="y10" value="1" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">y₂(x₀):</label>
+      <input class="form-control" name="y20" value="0" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Шаг h:</label>
+      <input class="form-control" name="h" value="0.1" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Число шагов n:</label>
+      <input class="form-control" name="n" value="20" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">f₁(x, y₁, y₂):</label>
+      <input class="form-control" name="f1"
+             placeholder="пример: y2"
+             value="y2" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">f₂(x, y₁, y₂):</label>
+      <input class="form-control" name="f2"
+             placeholder="пример: -y1"
+             value="-y1" required>
+    </div>
+    <button class="btn btn-primary" type="submit">Решить</button>
+  </form>
+</div>
+
+{% if result %}
+  <div class="mt-4">
+    <h3>Результат:</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr><th>i</th><th>x</th><th>y₁</th><th>y₂</th></tr>
+      </thead>
+      <tbody>
+      {% for point in result %}
+        <tr>
+          <td>{{ loop.index0 }}</td>
+          <td>{{ "%.4f"|format(point[0]) }}</td>
+          <td>{{ "%.6f"|format(point[1]) }}</td>
+          <td>{{ "%.6f"|format(point[2]) }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+{% endblock %}
