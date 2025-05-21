@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Онлайн-калькулятор численных методов</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="/static/images/vsu_logo.png"
+             alt="ВСУ" height="30" class="me-2">
+        Онлайн-калькулятор
+      </a>
+      <!-- убрали остальные ссылки -->
+    </div>
+  </nav>
+
+  <!-- Header Image -->
+  <header class="bg-image text-white text-center d-flex align-items-center"
+          style="background-image: url('/static/images/vsu_campus.jpg');
+                 height: 300px; background-size: cover; background-position: center;">
+    <div class="w-100" style="background: rgba(0, 0, 0, 0.5);">
+      <h1 class="display-4 py-5">Калькулятор Численных Методов</h1>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-5">
+    
+<div class="card p-4 shadow-sm">
+  <h2 class="mb-4">Метод простой итерации</h2>
+
+  
+
+  <form method="POST" id="form-iter" class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label">Размерность n</label>
+      <input type="number" id="n" name="n" class="form-control" min="1" value="3" required>
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+      <button type="button" class="btn btn-secondary w-100" onclick="buildMatrix()">Построить таблицу</button>
+    </div>
+    <div id="matrix-container" class="table-responsive col-12 mt-3"></div>
+    <div class="col-md-3">
+      <label class="form-label">ε (точность)</label>
+      <input type="number" step="any" name="eps" class="form-control" value="0.001" required>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Решить</button>
+    </div>
+  </form>
+</div>
+
+
+
+<script>
+  function buildMatrix() {
+    const n = parseInt(document.getElementById('n').value, 10);
+    let html = '<table class="table table-bordered"><thead><tr><th></th>';
+    for (let j = 0; j < n; j++) {
+      html += `<th>a${j+1},${j+1}</th>`;
+    }
+    html += '<th>b</th><th>x⁰</th></tr></thead><tbody>';
+    for (let i = 0; i < n; i++) {
+      html += `<tr><th>Row ${i+1}</th>`;
+      for (let j = 0; j < n; j++) {
+        html += `<td><input type="number" step="any" class="form-control form-control-sm" name="a_${i}_${j}" required></td>`;
+      }
+      html += `<td><input type="number" step="any" class="form-control form-control-sm" name="b_${i}" required></td>`;
+      html += `<td><input type="number" step="any" class="form-control form-control-sm" name="x0_${i}" value="0" required></td>`;
+      html += '</tr>';
+    }
+    html += '</tbody></table>';
+    document.getElementById('matrix-container').innerHTML = html;
+  }
+  document.addEventListener('DOMContentLoaded', buildMatrix);
+</script>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-light py-4 text-center">
+    <div class="container">
+      <p class="mb-0">©  ВГУ, Математический факультет</p>
+      <p class="mb-0">Лалабекян Д.А.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
