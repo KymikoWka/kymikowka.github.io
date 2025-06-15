@@ -35,3 +35,4 @@ def krylov_method(A, f):
     eigvals = np.roots(poly).tolist()
 
     return V, b, coeffs, eigvals
+    test
