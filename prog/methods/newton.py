@@ -22,4 +22,3 @@ def newton_method(f, df, x0, eps, max_iter=100):
             break
         x = x_new
     return iterations
-test
